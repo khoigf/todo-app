@@ -7,18 +7,19 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
 
-// Khởi tạo danh sách todos
 let todos = [
     { id: 1, task: "Learn DevOps" },
     { id: 2, task: "Code API" }
 ];
 
-// Endpoint lấy danh sách todos
+app.get('/', (req, res) => {
+    res.send('Hello, DevOps World with Node.js!');
+  });
+
 app.get('/todos', (req, res) => {
     res.json({ message: "List Task:", todos: todos });
 });
 
-// Endpoint thêm todo mới
 app.post('/todos', (req, res) => {
     const { task } = req.body;
     if (!task) {
@@ -29,15 +30,6 @@ app.post('/todos', (req, res) => {
     res.status(201).json({ message: 'Task added successfully', todo: newTodo });
 });
 
-// Bắt lỗi không xử lý
-process.on('uncaughtException', (err) => {
-    console.error('Unhandled Exception:', err);
-});
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection:', promise, 'reason:', reason);
-});
-
-// Lắng nghe trên cổng đã chỉ định
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
