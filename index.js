@@ -6,12 +6,13 @@ app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 let todos = [
     {
-        "task": "Learn DevOps"
+        id: 1,
+        task: "Learn DevOps"
     },
     {
-        "task": "Code API"
+        id: 2,
+        task: "Code API"
     }
-        
 ];
 
 app.get('/todos', (req, res) => {
