@@ -15,7 +15,7 @@ let todos = [
 ];
 
 app.get('/todos', (req, res) => {
-    res.json(todos);
+    res.json({ message: "List Task:", todos: todos });
 });
 
 app.post('/todos', (req, res) => {
