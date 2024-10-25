@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 app.use(bodyParser.json());
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 let todos = [
     {
         id: 1,
