@@ -10,17 +10,21 @@ app.use(bodyParser.json());
 
 const register = new client.Registry();
 client.collectDefaultMetrics({ register });
+const isDocker = process.env.NODE_ENV === 'production';
+const logstashHost = isDocker ? 'logstash' : 'localhost';
+
 const logger = winston.createLogger({
     transports: [
-        new winston.transports.Console(), // Log to console for local debugging
-        new LogstashTransport({
-            port: 5000,
-            node_name: 'todo-app',
-            host: process.env.LOGSTASH_HOST || 'logstash' // Đặt host Logstash từ biến môi trường
-        })
+        new winston.transports.Console(),
+        ...(isDocker ? [
+            new LogstashTransport({
+                port: 5000,
+                node_name: 'nodejs-app',
+                host: logstashHost
+            })
+        ] : [])
     ]
 });
-
 app.get('/metrics', async (req, res) => {
     try {
         res.set('Content-Type', register.contentType);
