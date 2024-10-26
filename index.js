@@ -8,6 +8,16 @@ const { LogstashTransport } = require('winston-logstash-transport');
 const app = express();
 app.use(bodyParser.json());
 
+const httpRequestCounter = new client.Counter({
+    name: 'http_requests_total',
+    help: 'Total number of HTTP requests',
+});
+
+app.use((req, res, next) => {
+    httpRequestCounter.inc();
+    next();
+});
+
 const register = new client.Registry();
 client.collectDefaultMetrics({ register });
 const isDocker = process.env.NODE_ENV === 'production';
@@ -27,8 +37,8 @@ const logger = winston.createLogger({
 });
 app.get('/metrics', async (req, res) => {
     try {
-        res.set('Content-Type', register.contentType);
-        res.end(await register.metrics());
+        res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
     } catch (error) {
         logger.error('Error fetching metrics', error);
         res.status(500).json({ message: 'Error fetching metrics' });
@@ -44,7 +54,7 @@ let todos = [
 
 app.get('/', (req, res) => {
     logger.info('Hello, DevOps World with Node.js!');
-    res.send('Hello, DevOps World with Node.js!');
+    res.send('Hello, DevOps World with Node.js 00!');
   });
 
 app.get('/todos', (req, res) => {
